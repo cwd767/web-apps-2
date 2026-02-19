@@ -2,7 +2,7 @@ class BitcoinsController < ApplicationController
 
   def index
     @bitcoin = params[:amount].to_f
-    
+
     # connect to the Blockchain.com Exchange Rates API
     # DON'T CHANGE THIS CODE
     # ----------------------
@@ -18,7 +18,7 @@ class BitcoinsController < ApplicationController
     @usd_rate = bitcoin_data["USD"]["last"]
 
     # calculate value in USD of user's bitcoin
-    @usd_value = @usd_rate * @bitcoin
+    @usd_value = (@usd_rate * @bitcoin).round(2)
     
     # add backend code
     # render bitcoins/index view
