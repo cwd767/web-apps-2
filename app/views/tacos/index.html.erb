@@ -6,9 +6,9 @@
 <p>There are so many kinds of tacos!</p>
 
 <ul>
-  <% for filling in fillings %>
-    <li><%= filling %></li>
+  <% for @filling in @fillings %>
+    <li><%= @filling %></li>
   <% end %>
 </ul>
 
-<p>Currently, there are <%= fillings.count %> kinds of tacos.</p>
+<p>Currently, there are <%= @fillings.count %> kinds of tacos.</p>
