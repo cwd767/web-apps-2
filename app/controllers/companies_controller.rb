@@ -10,7 +10,7 @@ class CompaniesController < ApplicationController
     # find a Company
       @id = params["id"]
       @company = Company.find_by({"id" => @id})
-      
+      @contacts = Contact.where({"company_id" => @id})
     # render companies/show view with details about Company
   end
 
@@ -33,22 +33,23 @@ class CompaniesController < ApplicationController
       redirect_to "/companies"
   end
 
-  # def edit
-  #   # find a Company
-  #   # render view with edit Company form
-  # end
+  def edit
+    @company = Company.find_by({"id" => params["id"]})
+  end
 
-  # def update
-  #   # find a Company
-  #   # assign user-entered form data to Company's columns
-  #   # save Company row
-  #   # redirect user
-  # end
+  def update
+    company = Company.find_by({"id" => params["id"]})
+    company["name"] = params["name"]
+    company["city"] = params["city"]
+    company["state"] = params["state"]
+    company.save
+    redirect_to "/companies"
+  end
 
-  # def destroy
-  #   # find a Company
-  #   # destroy Company row
-  #   # redirect user
-  # end
+  def destroy
+    company = Company.find_by({"id" => params["id"]})
+    company.destroy
+    redirect_to "/companies"
+  end
 
 end

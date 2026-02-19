@@ -1,6 +1,75 @@
 <h1>New Post</h1>
 
-<form action="/posts" method="post">
-  <%# add form fields %>
-  <button>Submit</button>
+<form action="/posts" method="post" enctype="multipart/form-data">
+  <%= hidden_field_tag :authenticity_token, form_authenticity_token %>
+
+  <div class="mb-3">
+    <label class="form-label">Author</label>
+    <input type="text" name="author" class="form-control" placeholder="Your name">
+  </div>
+
+  <div class="mb-3">
+    <label class="form-label">Photo</label>
+    <div id="drop-zone"
+         style="border: 2px dashed #aaa; border-radius: 8px; padding: 40px; text-align: center; cursor: pointer; background: #fafafa;">
+      <p id="drop-label" style="margin: 0; color: #888;">Drag & drop a photo here, or click to select</p>
+      <img id="preview" src="" style="display: none; max-height: 300px; margin-top: 16px; border-radius: 8px;">
+      <input type="file" id="image-input" name="image" accept="image/*" style="display: none;">
+    </div>
+  </div>
+
+  <div class="mb-3">
+    <label class="form-label">Caption</label>
+    <textarea name="body" class="form-control" rows="3" placeholder="Write a caption..."></textarea>
+  </div>
+
+  <button class="btn btn-success">Post</button>
 </form>
+
+<script>
+  const dropZone = document.getElementById("drop-zone");
+  const input = document.getElementById("image-input");
+  const preview = document.getElementById("preview");
+  const label = document.getElementById("drop-label");
+
+  dropZone.addEventListener("click", () => input.click());
+
+  dropZone.addEventListener("dragover", (e) => {
+    e.preventDefault();
+    dropZone.style.borderColor = "#198754";
+    dropZone.style.background = "#f0fff4";
+  });
+
+  dropZone.addEventListener("dragleave", () => {
+    dropZone.style.borderColor = "#aaa";
+    dropZone.style.background = "#fafafa";
+  });
+
+  dropZone.addEventListener("drop", (e) => {
+    e.preventDefault();
+    dropZone.style.borderColor = "#aaa";
+    dropZone.style.background = "#fafafa";
+    const file = e.dataTransfer.files[0];
+    if (file) {
+      setFile(file);
+      // Sync dropped file to the actual input so it's included in form submission
+      const dt = new DataTransfer();
+      dt.items.add(file);
+      input.files = dt.files;
+    }
+  });
+
+  input.addEventListener("change", () => {
+    if (input.files[0]) setFile(input.files[0]);
+  });
+
+  function setFile(file) {
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      preview.src = e.target.result;
+      preview.style.display = "block";
+      label.style.display = "none";
+    };
+    reader.readAsDataURL(file);
+  }
+</script>

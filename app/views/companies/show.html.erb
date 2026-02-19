@@ -7,12 +7,13 @@
 <h3>Contacts</h3>
 
 <ul>
-  <li>Michael Scott</li>
-  <li>Dwight Schrute</li>
+  <% @contacts.each do |contact| %>
+    <li><%= contact["last_name"] %>, <%= contact["first_name"] %></li>
+  <% end %>
 </ul>
 
 <p>
-  <a href="">New Contact</a>
+  <a href="/contacts/new?company_id=<%= @company["id"] %>">New Contact</a>
 </p>
 
 <p>
